@@ -13,6 +13,10 @@ class UserController {
 
             event.preventDefault();
 
+            let btnSubmit = this.formEl.querySelector("[type=submit]");
+
+            btnSubmit.disabled = true;
+
             let values = this.getValues();
 
             this.getPhoto().then(
@@ -21,6 +25,10 @@ class UserController {
                     values.photo = content;
 
                     this.addLine(values);
+
+                    this.formEl.reset();
+
+                    btnSubmit.disabled = false;
 
                 },
                 (error) => {
@@ -114,7 +122,7 @@ class UserController {
         content +=      '<td>' + dataUser.name + '</td>';
         content +=      '<td>' + dataUser.email + '</td>';
         content +=      '<td>' + (dataUser.admin == true ? "Sim" : "Não") + '</td>';
-        content +=      '<td>' + dataUser.birthdate + '</td>';
+        content +=      '<td>' + dataUser.register.toLocaleDateString() + '</td>';
         content +=      '<td>';
         content +=          '<button type="button" class="btn btn-primary btn-xs btn-flat">Editar</button>';
         content +=          '<button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>';
