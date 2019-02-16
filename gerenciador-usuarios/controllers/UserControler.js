@@ -132,6 +132,8 @@ class UserController {
         let tr = document.createElement("tr");
         let content = '';
 
+        tr.dataset.user = JSON.stringify(dataUser);
+
         content += '<tr>';
         content +=      '<td><img src="' + dataUser.photo + '" alt="User Image" class="img-circle img-sm"/></td>';
         content +=      '<td>' + dataUser.name + '</td>';
@@ -147,7 +149,31 @@ class UserController {
         tr.innerHTML = content;
     
         this.tbodyEl.appendChild(tr);
+
+        this.updateCount();
     
+    }
+
+    updateCount() {
+
+        let numberUsers = 0;
+        let numberAdmin = 0;
+
+        [...this.tbodyEl.children].forEach(tr => {
+
+            numberUsers++;
+
+            let user = JSON.parse(tr.dataset.user);
+
+            if (user._admin) {
+                numberAdmin++;
+            }
+
+        });
+
+        document.getElementById("usersNumber").innerHTML = numberUsers;
+        document.getElementById("adminsNumber").innerHTML = numberAdmin;
+
     }
 
 }
