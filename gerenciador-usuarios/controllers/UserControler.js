@@ -19,6 +19,9 @@ class UserController {
 
             let values = this.getValues();
 
+            if (!values)
+                return false;
+
             this.getPhoto().then(
                 (content) => {
 
@@ -87,8 +90,16 @@ class UserController {
     getValues() {
 
         let user = {};
+        let isValid = true;
 
         [...this.formEl.elements].forEach(function(field, index) {
+
+            if (['name', 'email', 'password'].indexOf(field.name) > -1 && !field.value) {
+
+                field.parentElement.classList.add("has-error");
+                isValid = false;
+
+            }
 
             if (field.name == "gender") {
                 
@@ -107,6 +118,10 @@ class UserController {
             }
     
         });
+
+        if (!isValid) {
+            return false;
+        }
     
         return new User(user.name, user.gender, user.birthdate, user.country, user.email, user.password, user.photo, user.admin);
 
@@ -122,7 +137,7 @@ class UserController {
         content +=      '<td>' + dataUser.name + '</td>';
         content +=      '<td>' + dataUser.email + '</td>';
         content +=      '<td>' + (dataUser.admin == true ? "Sim" : "Não") + '</td>';
-        content +=      '<td>' + dataUser.register.toLocaleDateString() + '</td>';
+        content +=      '<td>' + Utils.dateFormat(dataUser.register) + '</td>';
         content +=      '<td>';
         content +=          '<button type="button" class="btn btn-primary btn-xs btn-flat">Editar</button>';
         content +=          '<button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>';
