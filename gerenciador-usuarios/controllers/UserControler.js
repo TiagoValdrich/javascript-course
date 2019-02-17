@@ -6,11 +6,11 @@ class UserController {
         this.tbodyEl = document.getElementById(tbodyId);
 
         this.onSubmit();
-        this.onEditCancel();
+        this.onEdit();
 
     }
 
-    onEditCancel() {
+    onEdit() {
 
         document.querySelector("#box-user-update .btn-cancel").addEventListener("click", event => {
 
@@ -164,6 +164,43 @@ class UserController {
         this.tbodyEl.appendChild(tr);
 
         tr.querySelector(".btn-edit").addEventListener("click", event => {
+
+            let json = JSON.parse(tr.dataset.user);
+            let form = document.querySelector("#form-user-update");
+
+            for (let name in json) {
+
+                let field = form.querySelector("[name=" + name.replace("_", "") + "]");
+
+                if (field) {
+
+                    switch (field.type) {
+
+                        case 'file':
+                        continue;
+
+                        case 'radio':
+
+                            field = form.querySelector("[name=" + name.replace("_", "") + "][value=" + json[name] + "]");
+                            field.checked = true;
+
+                        break;
+
+                        case 'checkbox':
+
+                            field.checked = json[name];
+
+                        break;
+
+                        default:
+
+                            field.value = json[name];
+
+                    }
+                    
+                }
+
+            }
 
             this.showPanelUpdate();
 
